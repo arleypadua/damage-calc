@@ -200,15 +200,21 @@ $(document).ready(function () {
 		}
 	}
 
-	let importParam = params.get('import');
-	if (importParam) {
-        try {
-            var decodedImport = atob(importParam); // Decode base64
-            $('.import-team-text').val(decodedImport); // Set value to text area
-        } catch (e) {
-            console.error('Failed to decode Import parameter:', e);
-        }
-	}
+	var hash = window.location.hash.substr(1); // Remove the leading '#'
+   if (hash) {
+       var params = new URLSearchParams(hash);
+       var importParam = params.get('import');
+       if (importParam) {
+           try {
+               var decodedData = atob(importParam); // Decode the base64 string
+               $('.import-team-text').val(decodedData); // Set the value to the text area
+               // Clear the fragment to prevent re-processing if the user refreshes
+               window.location.hash = '';
+           } catch (e) {
+               console.error('Failed to decode import data:', e);
+           }
+       }
+   }
 	
 	$(".calc-trigger").bind("change keyup", PC_HANDLER);
 	performCalculations();
